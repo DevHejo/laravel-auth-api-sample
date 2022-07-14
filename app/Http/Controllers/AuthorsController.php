@@ -6,6 +6,9 @@ use App\Models\Author;
 use App\Http\Requests\StoreAuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
 
+use App\Http\Resources\AuthorsResource;
+use App\Http\Requests\AuthorsRequest;
+
 class AuthorsController extends Controller
 {
     /**
@@ -15,7 +18,13 @@ class AuthorsController extends Controller
      */
     public function index()
     {
-        //
+        // $AuthorsResource = AuthorsResource::collection(Author::all());
+        // return response()->json([
+        //     'data' => $AuthorsResource,
+        //     'status' => 200,
+        // ]);
+
+        return AuthorsResource::collection(Author::all());
     }
 
     /**
@@ -34,9 +43,20 @@ class AuthorsController extends Controller
      * @param  \App\Http\Requests\StoreAuthorRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAuthorRequest $request)
+    public function store(AuthorsRequest $request, Author $author)
     {
-        //
+        // $author->create([
+        //     'name' => $request->input('name')
+        // ]);
+
+        $validated = $request->validated();
+
+        $result = $author->create([
+            'name' => $validated['name'],
+        ]);
+
+        return new AuthorsResource($result);
+        // return $result;
     }
 
     /**
@@ -47,22 +67,37 @@ class AuthorsController extends Controller
      */
     public function show(Author $author)
     {
+        // all the below methods works.
         // return $author;
+
         // return response()->json($author);
-        return response()->json([
-            'data' => [
-                'id' => $author->id,
-                'type' => 'Author',
-                'attributes' => [
-                    'name' => $author->name,
-                    'created_at' => $author->created_at,
-                    'updated_at' => $author->updated_at,
-                ],
-            ],
-            'status' => 200,
-            'headers' => [],
-            'options' => 0,
-        ]);
+
+        // return response()->json([
+        //     'data' => [
+        //         'id' => $author->id,
+        //         'type' => 'Author',
+        //         'attributes' => [
+        //             'name' => $author->name,
+        //             'created_at' => $author->created_at,
+        //             'updated_at' => $author->updated_at,
+        //         ],
+        //     ],
+        //     'status' => 200,
+        //     'headers' => [],
+        //     'options' => 0,
+        // ]);
+
+        // $AuthorsResource = new AuthorsResource($author);
+        // return response()->json([
+        //     'data' => $AuthorsResource,
+        //     'status' => 200,
+        //     'headers' => [],
+        //     'options' => 0,
+        // ]);
+
+        // return response()->json($AuthorsResource);
+
+        return new AuthorsResource($author);
     }
 
     /**
@@ -83,9 +118,18 @@ class AuthorsController extends Controller
      * @param  \App\Models\Author  $author
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateAuthorRequest $request, Author $author)
+    public function update(AuthorsRequest $request, Author $author)
     {
-        //
+        $author->update([
+            'name' => $request->input('name'),
+        ]);
+
+        // all these methods works
+        // return response()->json($author);
+        // return response()->json(new AuthorsResource($author));
+        return new AuthorsResource($author);
+        // end of methods
+
     }
 
     /**
