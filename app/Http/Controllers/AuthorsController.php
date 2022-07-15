@@ -142,6 +142,6 @@ class AuthorsController extends Controller
     {
         $author->delete();
         return response(null, 204);
-         
+        
     }
 }
