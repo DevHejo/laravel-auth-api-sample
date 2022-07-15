@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 // controllers
 use App\Http\Controllers\AuthorsController;
+use App\Http\Controllers\BooksController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,6 +31,8 @@ Route::middleware('auth:api')->prefix('v1')->group(function() {
     });
     // Route::get('/authors/{author}', [AuthorsController::class, 'show']);
     Route::apiResource('/authors', AuthorsController::class);
+    // Route::post('/books/create', [BooksController::class, 'create']);
+    Route::apiResource('/books', BooksController::class);
 });
 
 
